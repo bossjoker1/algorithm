@@ -1,5 +1,5 @@
 # algorithm
-## problems on leetcode, hope can be stronger
+## problems on leetcode and CSP
 ### Including
 
 - day by day
