@@ -1,44 +1,41 @@
-class Solution {
-public:
+//并查集方法实现，平均时间复杂度为O(a(n)), a(n)为阿克曼函数的反函数，比O(logn)要快
+//主要为 查找 + 合并
+//par[i] = i 则i为所在树的根
+int par[MAX_N]; //父亲
+int rank[MAX_N]; //树的高度
 
-    int rank[1001];
-
-    int Find(vector<int>& parent, int index) {
-        if (parent[index] != index) {
-            parent[index] = Find(parent, parent[index]);
-        }
-        return parent[index];
+//初始化
+void init(int n){
+    for(int i = 0 ;i < n; i++){
+        par[i] = i;
+        rank[i] = 0;
     }
+}
 
-    // 朝高的集合合并
-    void Union(vector<int>& parent, int index1, int index2) {
-        int x = Find(parent, index1), y = Find(parent, index2);
-        if(x==y) return;
-        if(rank[x] < rank[y]){
-            parent[x] = y;
-        }else{
-            parent[y] = x;
-            if(rank[x] == rank[y]) rank[x]++; 
-        }
+//查询树根
+int find(int x){
+    if (par[x] == x)
+        return x;
+    else
+        //递归查找，同时压缩路径
+        return par[x] = find(par[x]);
+}
 
+//合并 x 和 y 所属的集合
+void unite(int x, int y){
+    x = find(x);
+    y = find(y);
+    if (x == y) return;
+
+    if(rank[x] < rank[y]){
+        par[x] = y;
+    }else{
+        par[y] = x;
+        if(rank[x] == rank[y]) rank[x]++; 
     }
+}  
 
-    vector<int> findRedundantConnection(vector<vector<int>>& edges) {
-        int nodesCount = edges.size();
-        vector<int> parent(nodesCount + 1);
-        for (int i = 1; i <= nodesCount; ++i) {
-            parent[i] = i;
-            rank[i] = 0;
-        }
-        for (auto& edge: edges) {
-            int node1 = edge[0], node2 = edge[1];
-            if (Find(parent, node1) != Find(parent, node2)) {
-                Union(parent, node1, node2);
-            } else {
-                return edge;
-            }
-        }
-        return {};
-    }
-};
+bool same(int x, int y){
+    return find(x) == find(y);
+}
 
