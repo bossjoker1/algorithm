@@ -3,7 +3,7 @@
 
 // 初步分析，似乎符合并查集的特征
 
-// 评论区大神，双色标记法
+// 评论区大神，双色标记法 0 1 
 class Solution {
 private:
     bool dfs(const vector<vector<int>> &g, int i, int c, vector<int> &v) {      //返回第i个点染c色能否成功
