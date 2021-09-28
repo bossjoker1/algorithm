@@ -10,16 +10,16 @@ void expmod(mpz_t a, mpz_t E, mpz_t N) {
 	mpz_init_set(A, a);
 	mpz_init(temp);
 	mpz_set_ui(a, 1);
-	mpz_mod_ui(temp, e, 2);	// 一些准备工作
-	while (mpz_cmp_ui(e, 0) != 0) {		// 当还没被除完时
-		if (mpz_cmp_ui(temp, 1) == 0) {		// 余数为1，则加上
+	mpz_mod_ui(temp, e, 2);	
+	while (mpz_cmp_ui(e, 0) != 0) {	
+		if (mpz_cmp_ui(temp, 1) == 0) {	
 			mpz_mul(a, a, A);
 			mpz_mod(a, a, n);
 		}
-		mpz_mul(A, A, A);		// 平方
+		mpz_mul(A, A, A);
 		mpz_mod(A, A, n);
 		mpz_div_ui(e, e, 2);
-		mpz_mod_ui(temp, e, 2);		// 求余数
+		mpz_mod_ui(temp, e, 2);	
 	}
     gmp_printf("%Zd\n", a);
 }
