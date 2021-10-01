@@ -18,8 +18,8 @@ inline ll read(){
 // basecase:
 // dp[1][1][0] = 1
 // dp[1][1][1] = 1
-// dp[i][j][0] = sum(dp[i-1][k][1]) k>j 
-// dp[i][j][1] = sum(dp[i-1][k][0]) k<j
+// dp[i][j][0] = sum(dp[i-1][k][1]) j <= k < i
+// dp[i][j][1] = sum(dp[i-1][k][0]) 1 <= k < j
 
 ll dp[25][25][2] = {0};
 
@@ -34,7 +34,7 @@ int main(){
             rep(k, 1, j){
                 dp[i][j][1] += dp[i-1][k][0];
             }
-            rep(k, j, i+1){
+            rep(k, j, i){
                 dp[i][j][0] += dp[i-1][k][1];
             }
         }
