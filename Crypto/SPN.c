@@ -1,8 +1,7 @@
 // SPN网络
 #include<stdio.h>
-#include<iostream>
-#include<string>
-using namespace std;
+#include<string.h>
+
 
 // s盒子 0为加密，1为解密
 short int s[2][16] = { { 14, 4, 13, 1, 2, 15, 11, 8, 3, 10, 6, 12, 5, 9, 0, 7 }, {14, 3, 4, 8, 1, 12, 10, 15, 7, 13, 9, 6, 11, 2, 0, 5} };
@@ -2284,9 +2283,9 @@ int main() {
     getchar(); //读回车
 
     for(int i=0;i<n;i++) {
-        for (unsigned short & i : key) {
+        for (int j = 0; j < 8; j++) {
             // 读入密钥
-            i = (((c = getchar()) >= 'a') ? (c - 'a' + 10) : (c - '0'));
+            key[j] = (((c = getchar()) >= 'a') ? (c - 'a' + 10) : (c - '0'));
         }
         // 获取5个子密钥
         for(int i = 0;i < 5; i++){
@@ -2298,8 +2297,8 @@ int main() {
 
         getchar(); // 读空格
         // 读取明文
-        for(unsigned short & i : text){
-            i = (((c = getchar()) >= 'a') ? (c - 'a' + 10) : (c - '0'));
+        for(int i = 0; i < 4; i++){
+            text[i] = (((c = getchar()) >= 'a') ? (c - 'a' + 10) : (c - '0'));
         }
         getchar(); // 读回车
         // 加密

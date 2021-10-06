@@ -122,19 +122,14 @@ int main(){
 			// 只有R100才可能是链尾，但存在可能的R100不是链尾的情况，
 			// 此时我们只需对链头到该R100进行遍历
 			// 对这种情况进行判断，可以省去不必要的10000次循环
-			if(mp.find(str) != mp.end() && (i + j) % 100 + 1 == 100) {
-				int k, nums = i+j;
+			if(mp.find(str) != mp.end() && (i + j) % 100 == 99) {
+				int nums = i+j;
 				char tempStr[9];
 				int flag = mp[str]; // 得到对应的链
 				strcpy(tempStr, startS[flag]);
 				for (int j = 0; j <= nums; j++) {
 					UnitSHA1(tempStr, 8, temp);		// 得到sha1
-					for (k = 0; k < 5; k++) {
-						if (temp[k] != sha1[k]) {
-							break;
-						}
-					}
-					if (k == 5) {
+					if (temp[0] == sha1[0] && temp[1] == sha1[1] && temp[2] == sha1[2] && temp[3] == sha1[3] && temp[4] == sha1[4]) {
 						f = true;
 						strcpy(str, tempStr);
 						break;

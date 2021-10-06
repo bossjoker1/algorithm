@@ -22,7 +22,7 @@ unsigned short subs(int mode, unsigned short text) {
 
 };
 
-unsigned short replace(int mode, unsigned short x) {
+unsigned short p(int mode, unsigned short x) {
 	return (x & 0x0001) | ((x & 0x0010) >> 3) | ((x & 0x0100) >> 6) |
 		((x & 0x1000) >> 9) | ((x & 0x0002) << 3) | (x & 0x0020) |
 		((x & 0x0200) >> 3) | ((x & 0x2000) >> 6) | ((x & 0x0004) << 6) |
@@ -44,7 +44,7 @@ unsigned int SPN(unsigned int key, unsigned short plaintext, unsigned short ciph
 	for (int i = 0; i <= 2; ++i) {
 		text ^= roundKey[i];
 		text = subs(mode, text);
-		text = replace(mode, text);
+		text = p(mode, text);
 	}
 	text ^= roundKey[3];
 	text = subs(mode, text);
@@ -65,100 +65,99 @@ inline unsigned short read()
 	return x;
 }
 
-// 快写
-inline void write(register unsigned int key) {
-	putchar((((key >> 28) & 0x0000000F) >= 10) ? (((key >> 28) & 0x0000000F) - 10 + 'a') : (((key >> 28) & 0x0000000F) + '0'));
-	putchar((((key >> 24) & 0x0000000F) >= 10) ? (((key >> 24) & 0x0000000F) - 10 + 'a') : (((key >> 24) & 0x0000000F) + '0'));
-	putchar((((key >> 20) & 0x0000000F) >= 10) ? (((key >> 20) & 0x0000000F) - 10 + 'a') : (((key >> 20) & 0x0000000F) + '0'));
-	putchar((((key >> 16) & 0x0000000F) >= 10) ? (((key >> 16) & 0x0000000F) - 10 + 'a') : (((key >> 16) & 0x0000000F) + '0'));
-	putchar((((key >> 12) & 0x0000000F) >= 10) ? (((key >> 12) & 0x0000000F) - 10 + 'a') : (((key >> 12) & 0x0000000F) + '0'));
-	putchar((((key >> 8) & 0x0000000F) >= 10) ? (((key >> 8) & 0x0000000F) - 10 + 'a') : (((key >> 8) & 0x0000000F) + '0'));
-	putchar((((key >> 4) & 0x0000000F) >= 10) ? (((key >> 4) & 0x0000000F) - 10 + 'a') : (((key >> 4) & 0x0000000F) + '0'));
-	putchar((((key >> 0) & 0x0000000F) >= 10) ? (((key >> 0) & 0x0000000F) - 10 + 'a') : (((key >> 0) & 0x0000000F) + '0'));
+inline void output(register unsigned int key){
+	char buf[8];  //输出缓冲区
+	for(int i = 0; i < 8; ++i){
+		buf[7 - i] = key & 0xf;
+		if(buf[7 - i] < 10) buf[7 - i] += '0';
+		else buf[7 - i] = (buf[7 - i] - 10) + 'a'; 
+		key >>= 4;
+	}
+	for(int i = 0; i < 8; ++i) putchar(buf[i]);
+	putchar('\n');
 }
 
 int main()
 {
 	int n, maxNum[2];
-	pair<int, int> count1[256], count2[256];
-	unsigned int plaintext[65536], ciphertext[65536], temp1[4], temp2[4], k[8], lastKey2, key, times;
-	//freopen("T3.in", "r", stdin);
+	pair<int, int> cnt1[256], cnt2[256];
+	unsigned int plain[65536], cipher[65536], temp1[4], temp2[4], k[8], lastKey2, key, count;
 	scanf("%d", &n);
 	getchar();
 	for (int i = 0; i < n; i++) {
 		lastKey2 = -1;
-		fill(count1, count1 + 256, pair<int, int>(0, 0));
-		fill(count2, count2 + 256, pair<int, int>(0, 0));
+		fill(cnt1, cnt1 + 256, pair<int, int>(0, 0));
+		fill(cnt2, cnt2 + 256, pair<int, int>(0, 0));
 		for (int j = 0; j < 65536; j++) {
-			ciphertext[j] = read();
+			cipher[j] = read();
 		}
 		// 计算第一条链
 		for (int j = 0; j < 65536; j += 37) {
-			if (((ciphertext[j] ^ ciphertext[j ^ 0xb00]) & 0xf0f0) == 0) {
+			if (((cipher[j] ^ cipher[j ^ 0xb00]) & 0xf0f0) == 0) {
 				for (k[5] = 0; k[5] < 16; k[5]++) {
 					for (k[7] = 0; k[7] < 16; k[7]++) {
-						temp1[1] = ((ciphertext[j] & 0xf00) >> 8) ^ k[5];
-						temp1[3] = ((ciphertext[j] & 0xf) ^ k[7]);
+						temp1[1] = ((cipher[j] & 0xf00) >> 8) ^ k[5];
+						temp1[3] = ((cipher[j] & 0xf) ^ k[7]);
 						temp1[1] = sbox[1][temp1[1]];
 						temp1[3] = sbox[1][temp1[3]];
-						temp2[1] = ((ciphertext[j ^ 0xb00] & 0xf00) >> 8) ^ k[5];
-						temp2[3] = ((ciphertext[j ^ 0xb00] & 0xf) ^ k[7]);
+						temp2[1] = ((cipher[j ^ 0xb00] & 0xf00) >> 8) ^ k[5];
+						temp2[3] = ((cipher[j ^ 0xb00] & 0xf) ^ k[7]);
 						temp2[1] = sbox[1][temp2[1]];
 						temp2[3] = sbox[1][temp2[3]];
 
 						temp1[1] ^= temp2[1];
 						temp1[3] ^= temp2[3];
 						if (temp1[1] == 6 && temp1[3] == 6)
-							count1[k[5] * 16 + k[7]].first++;
+							cnt1[k[5] * 16 + k[7]].first++;
 					}
 				}
 			}
-			if (((ciphertext[j] ^ ciphertext[j ^ 0x50]) & 0x0f0f) == 0) {
+			if (((cipher[j] ^ cipher[j ^ 0x50]) & 0x0f0f) == 0) {
 				for (k[4] = 0; k[4] < 16; k[4]++) {
 					for (k[6] = 0; k[6] < 16; k[6]++) {
-						temp1[0] = ((ciphertext[j] & 0xf000) >> 12) ^ k[4];
-						temp1[2] = ((ciphertext[j] & 0xf0) >> 4) ^ k[6];
+						temp1[0] = ((cipher[j] & 0xf000) >> 12) ^ k[4];
+						temp1[2] = ((cipher[j] & 0xf0) >> 4) ^ k[6];
 						temp1[0] = sbox[1][temp1[0]];
 						temp1[2] = sbox[1][temp1[2]];
-						temp2[0] = ((ciphertext[j ^ 0x50] & 0xf000) >> 12) ^ k[4];
-						temp2[2] = ((ciphertext[j ^ 0x50] & 0xf0) >> 4) ^ k[6];
+						temp2[0] = ((cipher[j ^ 0x50] & 0xf000) >> 12) ^ k[4];
+						temp2[2] = ((cipher[j ^ 0x50] & 0xf0) >> 4) ^ k[6];
 						temp2[0] = sbox[1][temp2[0]];
 						temp2[2] = sbox[1][temp2[2]];
 
 						temp1[0] ^= temp2[0];
 						temp1[2] ^= temp2[2];
 						if (temp1[0] == 5 && temp1[2] == 5)
-							count2[k[4] * 16 + k[6]].first++;
+							cnt2[k[4] * 16 + k[6]].first++;
 					}
 				}
 			}
 		}
 		// 得到部分密钥
 		for (int j = 0; j < 256; j++) {
-			count1[j].second = j;
-			count2[j].second = j;
+			cnt1[j].second = j;
+			cnt2[j].second = j;
 		}
-		sort(count1, count1 + 256);
+		sort(cnt1, cnt1 + 256);
 
-		sort(count2, count2 + 256);
-		k[4] = count2[255].second / 16;
-		k[6] = count2[255].second % 16;
+		sort(cnt2, cnt2 + 256);
+		k[4] = cnt2[255].second / 16;
+		k[6] = cnt2[255].second % 16;
 		for (int j = 255; j >= 0; j--) {
-			k[5] = count1[j].second / 16;
-			k[7] = count1[j].second % 16;
+			k[5] = cnt1[j].second / 16;
+			k[7] = cnt1[j].second % 16;
 
 			for (k[0] = 0; k[0] < 65536; k[0]++) {
 				key = (k[0] << 16) | (k[4] << 12) | (k[5] << 8) | (k[6] << 4) | k[7];
-				for (times = 0; times < 10; times++) {
-					if (!SPN(key, times * 1000 + 30000, ciphertext[times * 1000 + 30000], 0))
+				for (count = 0; count < 10; count++) {
+					if (!SPN(key, count * 1000 + 30000, cipher[count * 1000 + 30000], 0))
 						break;
 				}
-				if (times == 10) {
-					printf("%08x\n", key);
+				if (count == 10) {
+					output(key);
 					break;
 				}
 			}
-			if (times == 10)
+			if (count == 10)
 				break;
 		}
 	}
