@@ -1,7 +1,7 @@
-#include<stdio.h>
-#include<gmp.h>
+#include <stdio.h>
+#include <gmp.h>
 #include <time.h>
-#include<iostream>
+#include <iostream>
 #pragma GCC optimize("O3") // 加快编译
 using namespace std;
 

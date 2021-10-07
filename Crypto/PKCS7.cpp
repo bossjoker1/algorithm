@@ -45,15 +45,16 @@ kv5R8/NA7kSSvcsGIQ9EPWhr6HnCULpklw== \n\
 -----END EC PRIVATE KEY----- \n\
 ";
 
-//将证书转化为X509_st形式
+// 转化证书格式
 X509 *getX509(const char *cert) {
 	BIO *bio;
 	bio = BIO_new(BIO_s_mem());
 	BIO_puts(bio, cert);
+
 	return  PEM_read_bio_X509(bio, NULL, NULL, NULL);
 }
 
-//将私钥转化为EVP_PKEY形式
+// 转化私钥格式
 EVP_PKEY *getpkey(const char *private_key) {
 	BIO *bio_pkey = BIO_new_mem_buf((char *)private_key, strlen(private_key));
 
@@ -64,31 +65,30 @@ EVP_PKEY *getpkey(const char *private_key) {
 
 //主功能函数，generate_pkcs#7
 void gen_pkcs7() {
-	BIO *bio_out, *mem;
+	BIO *mem, *p7bio;
 	const EVP_CIPHER *cipher;
 	EVP_PKEY *pkey;
 	PKCS7 *p7;
-	X509 *cert;
-	size_t len;
+	size_t strLen;
 	X509_STORE *ca;
-	char buf[70], ans[5000];
+	char buf[70], res[5000];
 	string str="";
 	char *out;
-	int i, flags, num_signer;
+	int i, flags, signCounter;
 	//私钥转化EVP_PHEY形式
 	EVP_PKEY* pKey = getpkey(pkeyB);
-	if(pKey == NULL){
-		printf("key_ERROR\n");
-		return;
-	}
 	//ca存储证书X509形式
  	ca = X509_STORE_new();
   	X509_STORE_add_cert(ca, getX509(cacert));
+
+
 	//标准输入，存为str，以换行结尾
  	while(fgets(buf, sizeof(buf), stdin)){
  		str += buf;	
 	}
  	str += '\n';
+
+
 	//char[]转化为string
  	const char *s = str.c_str();
 	//见md
@@ -97,37 +97,40 @@ void gen_pkcs7() {
 	p7 = PKCS7_new();
 	//将BIO形式mem转化为PKCS7形式的p7
 	p7 = PEM_read_bio_PKCS7(mem, NULL, NULL, NULL);
-	if(p7 == NULL){
-		printf("ERROR\n");
-		return;
-	}
+
 	//解密
-	bio_out = PKCS7_dataDecode(p7,pKey,NULL,NULL);
-	len = BIO_read(bio_out,ans,sizeof(ans));
-	if(len == -2){
+	p7bio = PKCS7_dataDecode(p7,pKey,NULL,NULL);
+	// 读取BIO形式的数据存储结果到ans，并获取长度
+	strLen = BIO_read(p7bio,res,sizeof(res));
+	if(strLen == -2){
 		printf("ERROR\n");
 		return;
 	}
-	//见md
-	STACK_OF(PKCS7_SIGNER_INFO) *so = PKCS7_get_signer_info(p7);
-	if(so == NULL){
+	// 获得签名者信息stack
+	STACK_OF(PKCS7_SIGNER_INFO) *sk = PKCS7_get_signer_info(p7);
+	if(sk == NULL){
 		printf("ERROR\n");
 		return;
 	}
-	//栈帧
-	num_signer = sk_PKCS7_SIGNER_INFO_num(so);
-	PKCS7_SIGNER_INFO *si;
-	for(i = 0; i < num_signer; ++i){
-		si = sk_PKCS7_SIGNER_INFO_value(so,i);
+	PKCS7_SIGNER_INFO * signInfo;
+	// 签名者数量，这里只有一个	
+	signCounter = sk_PKCS7_SIGNER_INFO_num(sk);
+	for(i = 0; i < signCounter; ++i){
+		// 获得签名者信息
+		signInfo = sk_PKCS7_SIGNER_INFO_value(sk,i);
+		X509 *cert = PKCS7_cert_from_signer_info(p7, signInfo);
 		X509_STORE_CTX* ct = X509_STORE_CTX_new();
-		if(PKCS7_dataVerify(ca,ct,bio_out,p7,si) != 1){
+		if(PKCS7_dataVerify(ca,ct,p7bio,p7,signInfo) != 1){
 			printf("ERROR\n");
 			return;
 		}
+		// if(PKCS7_signatureVerify(p7bio,p7,signInfo, cert) != 1){
+		// 	printf("ERROR\n");
+		// 	return;
+		// }
 	}
-	//顺着输出ans数组
-	for(i = 0; i < len; ++i){
-		printf("%c", ans[i]);
+	for(i = 0; i < strLen; ++i){
+		printf("%c", res[i]);
 	}
 }
 

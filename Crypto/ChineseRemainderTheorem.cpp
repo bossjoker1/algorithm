@@ -35,7 +35,9 @@ int main() {
     mpz_t e, p, q;
     mpz_inits(e, p, q, NULL);
     scanf("%d", &n);
-    gmp_scanf("%Zd%Zd%Zd",p,q,e);
+    gmp_scanf("%Zd%Zd%Zd",&p,&q,&e);
+
+
 
     mpz_t d;
     mpz_init(d);
@@ -56,7 +58,7 @@ int main() {
     for(int i = 0;i < n;i++){
         mpz_t c;
         mpz_init(c);
-        gmp_scanf("%Zd",c);
+        gmp_scanf("%Zd",&c);
         CRT(c,d,p,q);
     }
     return 0;
