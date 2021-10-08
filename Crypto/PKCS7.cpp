@@ -88,16 +88,11 @@ void gen_pkcs7() {
 	}
  	str += '\n';
 
-
-	//char[]转化为string
  	const char *s = str.c_str();
-	//见md
 	mem = BIO_new_mem_buf(s,strlen(s));
-
 	p7 = PKCS7_new();
 	//将BIO形式mem转化为PKCS7形式的p7
 	p7 = PEM_read_bio_PKCS7(mem, NULL, NULL, NULL);
-
 	//解密
 	p7bio = PKCS7_dataDecode(p7,pKey,NULL,NULL);
 	// 读取BIO形式的数据存储结果到ans，并获取长度

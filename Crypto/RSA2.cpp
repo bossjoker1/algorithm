@@ -66,17 +66,17 @@ mpz_class mygcd(mpz_class paraA, mpz_class paraB){
 
 // 错误检测需要在前面完成
 mpz_class myInvert(mpz_class e, mpz_class phi){
-        mpz_class st[5000];
+        mpz_class q[5000];
         int count = -1;
         mpz_class temp, temp1, temp2;
 
         // 求解d
         temp = e % phi;
         temp1 = (e - temp) / phi;
-        st[0] = temp1;
+        q[0] = temp1;
         while(temp !=  0){
                 count++;
-                st[count] = temp1;
+                q[count] = temp1;
                 e = phi;
                 phi = temp;
                 temp = e % phi;
@@ -85,11 +85,9 @@ mpz_class myInvert(mpz_class e, mpz_class phi){
         // 开始逆序求d
         temp1 = 0;
         temp2 = 1;
-        phi = temp1 - phi;
         for(int i = count; i >= 0; i--){
                 temp = temp2;
-                temp2 = temp2 * st[i];
-                temp2 = temp1 - temp2;
+                temp2 = temp1 - temp2 * q[i];
                 temp1 = temp;
         }
         return temp1;

@@ -51,7 +51,6 @@ mpz_class myInvert(mpz_class e, mpz_class phi){
         // 开始逆序求d
         temp1 = 0;
         temp2 = 1;
-        phi = temp1 - phi;
         for(int i = count; i >= 0; i--){
                 temp = temp2;
                 temp2 = temp2 * st[i];
@@ -65,9 +64,13 @@ mpz_class myInvert(mpz_class e, mpz_class phi){
 }
 
 void CRT(mpz_class c, mpz_class d, mpz_class p, mpz_class q){
-    mpz_class a, b, sum;
-    mpz_powm(a.get_mpz_t (),c.get_mpz_t (),d.get_mpz_t (),p.get_mpz_t ());
-    mpz_powm(b.get_mpz_t (),c.get_mpz_t (),d.get_mpz_t (),q.get_mpz_t ());
+    mpz_class a, b, sum, d1, d2;
+    d1 = d % (p-1);
+    d2 = d % (q-1);
+    mpz_powm(a.get_mpz_t (),c.get_mpz_t (),d1.get_mpz_t (),p.get_mpz_t ());
+    mpz_powm(b.get_mpz_t (),c.get_mpz_t (),d2.get_mpz_t (),q.get_mpz_t ());
+    // a = mymod(c, (d%(p-1)), p);
+    // b = mymod(c, (d%(q-1)), q);
     mpz_class rp, rq;
     rp =  myInvert(p,q);
     rq =  myInvert(q,p);
