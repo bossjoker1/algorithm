@@ -15,22 +15,25 @@ inline ll read(){
     return f==1?x:-x;
 }
 
-ll v[30], w[30], dp[30005];
+// dp[i] 表示剩余价值
+
+ll dp[20005], v[35];
 
 int main(){
-    ll n, m;
-    n = read(), m = read();
 
-    rep(i, 1, m){
-        v[i] = read(), w[i] = read();
-        w[i] = v[i] * w[i];
+    ll V = read(), n = read();
+
+    rep(i, 1, n){
+        v[i] = read();
     }
 
-    rep(i, 1, m){
-        rpe(j, n, v[i]){
-            dp[j] = max(dp[j], dp[j - v[i]] + w[i]);
+    rep(i, 1, n){
+        rpe(j, V, v[i]){
+            dp[j] = max(dp[j], dp[j - v[i]] + v[i]);
         }
     }
-    printf("%lld\n", dp[n]);
+    
+    printf("%lld\n", V - dp[V]);
+
     return 0;
 }

@@ -15,22 +15,8 @@ inline ll read(){
     return f==1?x:-x;
 }
 
-ll v[30], w[30], dp[30005];
-
 int main(){
-    ll n, m;
-    n = read(), m = read();
 
-    rep(i, 1, m){
-        v[i] = read(), w[i] = read();
-        w[i] = v[i] * w[i];
-    }
 
-    rep(i, 1, m){
-        rpe(j, n, v[i]){
-            dp[j] = max(dp[j], dp[j - v[i]] + w[i]);
-        }
-    }
-    printf("%lld\n", dp[n]);
     return 0;
 }
