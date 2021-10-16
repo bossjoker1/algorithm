@@ -1,6 +1,7 @@
 {
     "files.associations": {
         "*.html": "html",
-        "vector": "cpp"
-    }
+        "vector": "cpp",
+        "xhash": "cpp"
+    },
 }
