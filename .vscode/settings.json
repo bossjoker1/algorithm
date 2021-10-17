@@ -2,6 +2,7 @@
     "files.associations": {
         "*.html": "html",
         "vector": "cpp",
-        "xhash": "cpp"
+        "xhash": "cpp",
+        "iostream": "cpp"
     },
 }
