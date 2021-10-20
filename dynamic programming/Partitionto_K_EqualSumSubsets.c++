@@ -57,4 +57,3 @@ public:
         return false;
     }
 };
-。
