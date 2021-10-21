@@ -3,6 +3,7 @@
         "*.html": "html",
         "vector": "cpp",
         "xhash": "cpp",
-        "iostream": "cpp"
+        "iostream": "cpp",
+        "queue": "cpp"
     },
 }
