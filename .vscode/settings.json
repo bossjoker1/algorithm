@@ -4,6 +4,10 @@
         "vector": "cpp",
         "xhash": "cpp",
         "iostream": "cpp",
-        "queue": "cpp"
+        "queue": "cpp",
+        "set": "cpp",
+        "utility": "cpp",
+        "xtree": "cpp",
+        "tuple": "cpp"
     },
 }
