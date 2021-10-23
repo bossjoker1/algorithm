@@ -9,7 +9,7 @@
 #include <string.h>
 using namespace std;
 
-multiset<pair<int, tuple<int, int, int>>, less<pair<int, tuple<int, int, int>>>> eventSet;
+set<pair<int, tuple<int, int, int>>, less<pair<int, tuple<int, int, int>>>> eventSet;
 
 // set维护高度序列
 set<pair<int,int>, greater<pair<int, int>>>heights;
