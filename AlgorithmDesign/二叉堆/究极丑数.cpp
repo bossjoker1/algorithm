@@ -22,14 +22,15 @@ inline int read(){
     return f==1?x:-x;
 }
 
-bool flag[1000000];
-int a[1000000];
+bool flag[2000000];
+int a[2000000];
 int num = 0;
 //素数筛 Sieve of Eratosthenes，其时间复杂度的结论是O(N*loglogN)
+// 生成的是小于2000000的素数集合
 void getPrime()
 {
     memset(flag,0,sizeof(flag));
-    for(int i = 2;i<=1000000;i++)
+    for(int i = 2;i<=2000000;i++)
     {
         if(!flag[i])
         {
@@ -39,7 +40,7 @@ void getPrime()
         for(int j = 0;j<num;j++)
         {   
             //取当前已有的素数乘以系数i，这样可以避免取一个素数乘所有系数而导致的重复计算 (比如2*6和3*4就重复了
-            if(a[j]*i>=100000)break;
+            if(a[j]*i>=2000000)break;
             flag[a[j]*i] = true;
         }
     }
@@ -62,14 +63,37 @@ bool check(int x){
     if(cnt==2)return true;
     else return false;
 }
+
+struct myTuple{
+    ll val, i, idx; 
+};
+
+bool operator< (myTuple m1, myTuple m2){
+    return m1.val > m2.val; // 按val从小到大
+}
  
 int main(){
     int m = read(), n = read();
-    getPrime();
+    getPrime(); // 获取素数表
+
+    priority_queue<myTuple> q;
+
     rep(i, 0, m-1){
-        printf("%d ", a[i]);
+        q.push(myTuple{a[i], i, 0});
     }
 
+    vector<ll> ans(n+1);
+
+    ans[0] = 1;
+    for(int j = 1; j <= n;){
+        myTuple t = q.top();
+        q.pop();
+        if(t.val != ans[j-1]){
+            ans[j++] = t.val;
+            printf("%lld ", t.val);
+        }
+        q.push(myTuple{ans[t.idx+1]*a[t.i], t.i, t.idx+1});
+    }
            
     return 0;
 }
