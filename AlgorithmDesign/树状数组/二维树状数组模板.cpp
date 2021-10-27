@@ -20,8 +20,8 @@ inline ll read(){
 int tree[MAX_N][MAX_N], n;
 
 // 单点修改 & 区间查询
-void add(int x, int y, int z){ //将点(x, y)加上z
-    int memo_y = y;
+void add(ll x, int y, ll z){ //将点(x, y)加上z
+    ll memo_y = y;
     while(x <= n){
         y = memo_y;
         while(y <= n)
@@ -29,20 +29,21 @@ void add(int x, int y, int z){ //将点(x, y)加上z
         x += x & -x;
     }
 }
-void ask(int x, int y){//求左上角为(1,1)右下角为(x,y) 的矩阵和
-    int res = 0, memo_y = y;
+ll ask(ll x, ll y){//求左上角为(1,1)右下角为(x,y) 的矩阵和
+    ll res = 0, memo_y = y;
     while(x){
         y = memo_y;
         while(y)
             res += tree[x][y], y -= y & -y;
         x -= x & -x;
     }
+    return res;
 }
 
 // 区间修改 & 单点查询
 // 注意此时维护的是差分数组d[i][j] = a[i][j] - a[i-1][j] - a[i][j-1] + a[i-1][j-1]
-void add(int x, int y, int z){ 
-    int memo_y = y;
+void add(ll x, ll y, ll z){ 
+    ll memo_y = y;
     while(x <= n){
         y = memo_y;
         while(y <= n)
@@ -50,20 +51,21 @@ void add(int x, int y, int z){
         x += x & -x;
     }
 }
-void range_add(int xa, int ya, int xb, int yb, int z){
+void range_add(ll xa, ll ya, ll xb, ll yb, ll z){
     add(xa, ya, z);
     add(xa, yb + 1, -z);
     add(xb + 1, ya, -z);
     add(xb + 1, yb + 1, z);
 }
-void ask(int x, int y){
-    int res = 0, memo_y = y;
+ll ask(ll x, ll y){
+    ll res = 0, memo_y = y;
     while(x){
         y = memo_y;
         while(y)
             res += tree[x][y], y -= y & -y;
         x -= x & -x;
     }
+    return res;
 }
 
 // 区间查询 & 区间修改 

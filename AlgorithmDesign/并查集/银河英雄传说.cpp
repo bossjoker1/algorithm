@@ -1,45 +1,82 @@
-// 带权并查集
-#include <bits/stdc++.h>
+#include <iostream>
+#include <vector>
+#include <map>
+#include <set>
+#include <algorithm>
+#include <queue>
+#include <string.h>
 using namespace std;
+ 
+#define rep(i,l,r) for(int i=(l);i<=(r);++i)
+#define rpe(i,r,l) for(int i=(r);i>=(l);--i)
 
-const int MAXN = 30000 + 5;
-int _opt;
-char _typ;
-int f[MAXN], sum[MAXN], Size[MAXN];
-//sum表示排名，即包括自己在内前面有多少人
-//Size表示集合大小，即自己最后一次做祖先时集合内有多少人
+#define MAX_N 30005
 
-int get(int k)
-{
-	if (f[k] == k) return k;
-	int fake = f[k];  //当前祖先
-	f[k] = get(f[k]);  //找祖先
-	sum[k] += sum[fake] - 1;  //更新排名
-	return f[k];
+typedef long long ll;
+
+// sum[i]表示包括自己前面有多少人
+// cnt[i]表示以i为祖先的集合有多少人
+int par[MAX_N], sum[MAX_N], cnt[MAX_N];
+ 
+inline int max(int x,int y){return x>y?x:y;}
+ 
+inline int read(){
+    ll x=0,f=1;char ch=' ';
+    while(ch<'0' || ch>'9'){if(ch=='-')f=-1;ch=getchar();}
+    while(ch>='0' && ch<='9'){x=x*10+(ch^48);ch=getchar();}
+    return f==1?x:-x;
 }
 
-void merge(int a, int b)
-{
-	int f1 = get(a), f2 = get(b);
-	sum[f1] = Size[f2] + 1;   //更新祖先排名，在get的时候pushdown到f1集合内的元素
-	Size[f2] += Size[f1];  //更新祖先为f2的集合的大小
-	f[f1] = f2;  // 更新所属祖先
+//初始化
+inline void init(int n){
+    for(int i = 1 ;i <= n; i++){
+        par[i] = i;
+        sum[i] = 1;
+        cnt[i] = 1;
+    }
 }
 
-int main()
-{
-	for (int i = 1; i <= MAXN; i++) f[i] = i, sum[i] = 1, Size[i] = 1;
-	cin >> _opt;
-	int a, b;
-	while (_opt--)
-	{
-		cin >> _typ >> a >> b;
-		if (_typ == 'M') merge(a, b);
-		else
-		{
-			if (get(a) != get(b)) cout << "-1\n";
-			else cout << abs(sum[a] - sum[b]) - 1 << endl;
-		}
-	}
-	return 0;
+//查询树根
+int find(int x){
+    if (par[x] == x)
+        return x;
+    int p = par[x];
+    par[x] = find(par[x]);
+    sum[x] += sum[p] - 1;  // -1是因为p算了两次
+    return par[x];
+}
+
+//合并 x 和 y 所属的集合
+void unite(int x, int y){
+    x = find(x);
+    y = find(y);
+    sum[x] = cnt[y] + 1; //更新祖先x排名, 需要find才能作用到集合内的元素
+    cnt[y] += cnt[x]; // 更新被合并祖先y的集合大小
+    par[x] = y;
+}  
+
+void query(int x, int y){
+    if(find(x) != find(y)){
+        printf("-1\n");
+    }else{
+        printf("%d\n", abs(sum[x] - sum[y])-1);
+    }
+}
+
+
+int main(){
+    init(MAX_N);
+    int T = read();
+    char c;int i, j;
+    rep(k, 1, T){
+        cin>>c;
+        i = read(),j = read();
+        if(c == 'M'){
+            unite(i, j);
+        }else{
+            query(i, j);
+        }
+    }
+           
+    return 0;
 }
