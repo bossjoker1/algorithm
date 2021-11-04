@@ -107,7 +107,7 @@ int main(){
 #include<cstdio>
 #include<algorithm>
 using namespace std;
-const int N=10000005,M=1005;
+const int N=10000005,M=10005;
 
 int n,m,Ans,A[M],B[M];
 bool flag,colored[N<<2];
@@ -165,3 +165,120 @@ int main()
     printf("%d",Ans);
     return 0;
 }
+
+// lower_bound()离散化，适用于浮点数或者N很大的时候
+
+#include<cmath>
+#include<cstdio>
+#include<algorithm>
+using namespace std;
+const int N=10000005,M=100005;
+/*struct node{//节约空间，可以把L,R放到参数里面，这样就只剩下covered了，直接放到数组 
+	int L,R;
+	int covered;
+};*/
+int n,m,flag,Ans,A[M],B[M],C[M<<1],covered[M<<3];//covered树变小了
+void Update(int rt)
+{
+    covered[rt]= covered[rt<<1]&&covered[rt<<1|1];
+}
+/*void Build(int rt,int l,int r)//堆式存储，其实什么也没干 ，每个点的子节点是清楚的，直接省略 
+{
+    if(l==r)
+      return;
+    int m=(l+r)>>1;
+    Build(rt<<1,l,m);
+    Build(rt<<1|1,m+1,r);
+    Update(rt);
+}
+*/
+void Modify(int rt,int l,int r,int L,int R)
+{
+    if(covered[rt]) return;//如果L到R都被覆盖了，那么都会从这个地方返回，flag最终为0 
+    if(L<=l && r<=R)//说明L,R区域中至少有一块没有被覆盖 
+    {
+        flag=1;covered[rt]=1;
+        return;
+    }
+    int m=(l+r)>>1;
+    if(L<=m) Modify(rt<<1,l,m,L,R);
+    if(m<R) Modify(rt<<1|1,m+1,r,L,R);
+    Update(rt);
+}
+
+int main()
+{
+    scanf("%d%d",&n,&m);
+    //Build(1,1,n);
+    for(int i=0;i<m;i++)
+    {
+      scanf("%d%d",A+i,B+i);
+	  C[i<<1]=A[i];
+	  C[i<<1|1]=B[i]+1; 
+  	}
+  	sort(C,C+(m<<1));
+  	int ncount=unique(C,C+(m<<1))-C;
+  	
+    for(int i=m-1;i;i--)
+    {
+    	int L=lower_bound(C,C+ncount,A[i])-C+1;
+		int R=lower_bound(C,C+ncount,B[i]+1)-C;
+        flag=0;
+        Modify(1,1,ncount+1,L,R);
+        if(flag) ++Ans;
+    }
+    printf("%d",Ans);
+    return 0;
+}
+
+// 动态建树法
+
+#include<cmath>
+#include<cstdio>
+#include<algorithm>
+using namespace std;
+const int N=10000005,M=100005;
+typedef struct node{
+	int covered;
+	struct node *lnode,*rnode; 
+}Node;
+int n,m,num,flag,Ans,A[M],B[M];
+Node tree[M<<2];
+void Update(Node * rt)
+{
+    rt->covered = rt->lnode->covered && rt->rnode->covered;
+}
+void Modify(Node *rt,int l,int r,int L,int R)
+{
+    if(rt->covered) return;
+    if(L<=l && r<=R) 
+    {
+        flag=1;rt->covered=1;
+        return;
+    }
+    if(rt->lnode==0)//和懒人标记一样，需要处理子节点的时候才创建，通常放在pushdown函数里面，和懒人标记一起处理 
+    {
+    	rt->lnode=tree+(++num);
+    	rt->rnode=tree+(++num);
+	}
+    int m=(l+r)>>1;
+    if(L<=m) Modify(rt->lnode,l,m,L,R);
+    if(m<R) Modify(rt->rnode,m+1,r,L,R);
+    Update(rt);
+}
+
+int main()
+{
+    scanf("%d%d",&n,&m);
+    for(int i=0;i<m;i++)
+      scanf("%d%d",A+i,B+i);
+	for(int i=m-1;i;i--)
+    {
+        flag=0;
+        Modify(tree,1,n,A[i],B[i]);
+        if(flag) ++Ans;
+    }
+    printf("%d",Ans);
+    return 0;
+}
+

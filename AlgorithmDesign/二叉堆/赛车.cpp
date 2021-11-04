@@ -102,7 +102,7 @@ int main() {
 		cur_t = temp.time;
 		if (cur_t > t) break;
 		ans++;
-		// 更新三个点的数据
+		// 更新四个点的相关数据
 		cars[temp.idx].x = cars[temp.x].x;
 		cars[temp.idx].y = temp.x;
 		if (v[cars[temp.idx].x] <= v[temp.idx])
