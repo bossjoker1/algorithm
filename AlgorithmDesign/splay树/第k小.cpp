@@ -1,4 +1,10 @@
-#include <bits/stdc++.h>
+#include<iostream>
+#include<cstdio>
+#include<cstdlib>
+#include<cstring>
+#include<cmath>
+#include<algorithm>
+using namespace std;
 using namespace std;
 const int N=401000;
 struct splay_tree

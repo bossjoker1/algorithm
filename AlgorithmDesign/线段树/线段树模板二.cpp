@@ -14,7 +14,7 @@ struct tree
 	ll l;
 	ll r;
 	ll sum;
-	ll add;
+	ll xor;
 	ll mul; 
 }node[N << 2];
 inline void update(int i) //修改子节点后，当前节点的值重新计算，前提是子节点已经计算了sum 
@@ -25,7 +25,7 @@ inline void build(int i, ll l, ll r)
 {
 	node[i].l = l;
 	node[i].r = r;
-	node[i].add = 0;
+	node[i].xor = 0;
 	node[i].mul = 1;
 	if(l == r)
 	{
@@ -41,15 +41,15 @@ inline void pushdown(int i)//计算当前标记对子节点的影响，同时将
 	ll l = node[i].l;
 	ll r = node[i].r;
 	ll len = r - l + 1;
-	node[lchild].sum =(node[lchild].sum*node[i].mul+node[i].add * (len - (len >> 1)))%MOD;
-	node[rchild].sum =(node[rchild].sum*node[i].mul+node[i].add * (len >> 1))%MOD;
+	node[lchild].sum =(node[lchild].sum*node[i].mul+node[i].xor * (len - (len >> 1)))%MOD;
+	node[rchild].sum =(node[rchild].sum*node[i].mul+node[i].xor * (len >> 1))%MOD;
 	
 	node[lchild].mul =(node[lchild].mul*node[i].mul)%MOD;
 	node[rchild].mul =(node[rchild].mul*node[i].mul)%MOD;
-	node[lchild].add =(node[lchild].add*node[i].mul+node[i].add)%MOD;
-	node[rchild].add =(node[rchild].add*node[i].mul+node[i].add)%MOD;
+	node[lchild].xor =(node[lchild].xor*node[i].mul+node[i].xor)%MOD;
+	node[rchild].xor =(node[rchild].xor*node[i].mul+node[i].xor)%MOD;
 
-	node[i].add = 0;
+	node[i].xor = 0;
 	node[i].mul = 1;
 }
 inline void modify1(int i, ll x, ll y, ll t)
@@ -60,7 +60,7 @@ inline void modify1(int i, ll x, ll y, ll t)
 	{
 		node[i].sum = (node[i].sum*t)%MOD;
 		node[i].mul = (node[i].mul*t)%MOD; 
-		node[i].add = (node[i].add*t)%MOD; 
+		node[i].xor = (node[i].xor*t)%MOD; 
 		return;
 	}
 	pushdown(i);
@@ -77,7 +77,7 @@ inline void modify2(int i, ll x, ll y, ll t)
 	if(x <= l && r <= y)
 	{
 		node[i].sum = (node[i].sum+(r - l + 1) * t)%MOD;
-		node[i].add = (node[i].add+t)%MOD;
+		node[i].xor = (node[i].xor+t)%MOD;
 		return;
 	}
 	pushdown(i);
