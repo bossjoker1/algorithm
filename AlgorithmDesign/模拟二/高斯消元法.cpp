@@ -1,3 +1,4 @@
+// 呜呜呜写了一个晚上
 #include<bits/stdc++.h>
 using namespace std;
 
@@ -57,11 +58,13 @@ bool handleString(string s) {
                 }
                 d = atoi(temp.c_str());
                 if (d > 99 || p - i > 2) {
+                    mp[cnt].clear();
                     return false;
                 }
                 i = p;
                 str.append(temp);
                 if (mp[cnt].find(str) != mp[cnt].end()) {
+                    mp[cnt].clear();
                     return false;
                 }
                 mp[cnt][str] = n * f;
