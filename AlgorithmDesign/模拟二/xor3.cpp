@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <string.h>
+#include <istream>
+using namespace std;
  
 #define rep(i,l,r) for(int i=(l);i<=(r);++i)
 #define rpe(i,r,l) for(int i=(r);i>=(l);--i)
