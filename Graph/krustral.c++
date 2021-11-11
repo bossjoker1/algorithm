@@ -18,7 +18,7 @@ int krustral(){
     init_union_find(V);
     int res = 0;
     for(int i = 0; i < E; i++){
-        edge s = es[i];
+        edge e = es[i];
         if(!same(e.u, e.v)){
             unite(e.u, e.v);
             res += e.cost;

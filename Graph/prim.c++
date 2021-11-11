@@ -46,7 +46,7 @@ int prim(vector<vector<int>>& points, int start){
 
         for(int j = 0; j < n;j ++){
             if(v[j] == -1 && g[j][index] < lowcost[j])
-                lowcost[j] = g[j][index];
+                lowcos[j] = g[j][index];
         }
         
     }
