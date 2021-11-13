@@ -4,13 +4,13 @@
  
 using namespace std;
  
-const int maxn = 5005;
+const int maxn = 1005;
 const double inf = 1e16;
 
-typedef long long ll;
-
 int x[maxn], y[maxn], a[maxn],vis[maxn];
-ll dist[1100000];
+double dist[maxn];
+
+typedef long long ll;
 
 inline int read(){
     int x=0,f=1;char ch=' ';
@@ -19,14 +19,17 @@ inline int read(){
     return f==1?x:-x;
 }
 
-inline ll dis(int i, int j) {
-    return (x[i] - x[j])*(x[i] - x[j]) + (y[i] - y[j])*(y[i] - y[j]);
+inline long long pw2(int x) {
+    return 1LL * x * x;
 }
+ 
+inline double dis(int i, int j) {
+    return sqrt(pw2(x[i] - x[j]) + pw2(y[i] - y[j])); }
 
 struct node {
     int id;
-    ll dist;
-    node(int i, ll d) : id(i), dist(d) {}
+    double dist;
+    node(int i, double d) : id(i), dist(d) {}
     bool operator < (const node& rhs) const {
         return dist > rhs.dist;
     }
@@ -42,7 +45,7 @@ int main() {
     for (int i = 1; i <= m; ++i) x[i] = read(), y[i] = read();
     double ans = 0;
     for (int i = 2; i <= n; ++i) dist[i] = inf;
-    ll max_d = -1;
+    double max_d = -1;
     q.push(node(1, 0));
     while (!q.empty()) {
         int u = q.top().id;
@@ -59,10 +62,11 @@ int main() {
             }
         }
     }
+    printf("%.2f", ans);
     int sum = 0;
     for(int i = 1; i <= n; i++){
-        if(a[i]*a[i] >= max_d) sum++;
+        if(a[i]*1.0 >=  max_d) sum++;
     }
-    printf("%d\n", sum);
+    // printf("%d\n", sum);
     return 0;
 }
