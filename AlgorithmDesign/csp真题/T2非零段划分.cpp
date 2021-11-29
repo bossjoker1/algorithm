@@ -1,20 +1,35 @@
-#include <stdio.h>
-#include <string.h>
- 
-#define rep(i,l,r) for(int i=(l);i<=(r);++i)
-#define rpe(i,r,l) for(int i=(r);i>=(l);--i)
- 
-const int maxn = 10005;
- 
-inline int max(int x,int y){return x>y?x:y;}
- 
-inline int read(){
-    int x=0,f=1;char ch=' ';
-    while(ch<'0' || ch>'9'){if(ch=='-')f=-1;ch=getchar();}
-    while(ch>='0' && ch<='9'){x=x*10+(ch^48);ch=getchar();}
-    return f==1?x:-x;
-}
+#include<iostream>
+#include<cstdio>
+#include<algorithm>
+#include<cstring>
+#include<vector>
+#include<map>
+using namespace std;
 
-int main(){
-    
+typedef long long LL;
+typedef pair<int,int> PII;
+const int N=5e5+10,mod=1e9+7;
+
+void add(int &a,LL b){a=(a+b)%mod;return ;}
+PII a[N];
+bool dis[N]; 
+
+int main()
+{
+	int n;
+	scanf("%d",&n);
+	for(int i=1;i<=n;i++)scanf("%d",&a[i].first),a[i].second=i;
+	sort(a+1,a+n+1);
+	int ma=0,cnt=0;
+	for(int i=n;i>=0;i--) 
+	{
+		int x=a[i].first,y=a[i].second;
+		if(x!=a[i+1].first)ma=max(ma,cnt);
+		
+		if(dis[y-1]&&dis[y+1]) cnt--;
+		else if(!dis[y-1]&&!dis[y+1])cnt++;
+		dis[y]=1;
+	}
+	printf("%d",ma);
+	return 0;
 }

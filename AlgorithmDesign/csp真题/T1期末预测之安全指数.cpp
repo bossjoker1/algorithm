@@ -4,7 +4,7 @@
 #define rep(i,l,r) for(int i=(l);i<=(r);++i)
 #define rpe(i,r,l) for(int i=(r);i>=(l);--i)
  
-const int maxn = 10005;
+const int maxn = 100005;
  
 inline int max(int x,int y){return x>y?x:y;}
  
@@ -15,25 +15,17 @@ inline int read(){
     return f==1?x:-x;
 }
 
-int B[maxn], n, sum1 = 0, sum2 = 0;
- 
-int main(){  
+int n, w[maxn], s[maxn], sum = 0;
+
+int main(){
     n = read();
+
     rep(i, 1, n){
-        B[i] = read();
-    }
-    sum1 = sum2 = B[1];
-    rep(i, 2, n){
-        if(B[i] > B[i-1]){
-            sum1 += B[i];
-            sum2 += B[i];       
-        }else{
-            sum1 += B[i-1];
-        }
+        w[i] = read(), s[i] = read();
+        sum += w[i] * s[i];
     }
 
-    printf("%d\n", sum1);
-    printf("%d\n", sum2);
+    printf("%d\n", max(0, sum));
 
-    return 0;
+
 }
