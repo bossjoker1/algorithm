@@ -8,9 +8,8 @@ using namespace std;
 
 typedef long long LL;
 typedef pair<int,int> PII;
-const int N=5e5+10,mod=1e9+7;
+const int N=5e5+10;
 
-void add(int &a,LL b){a=(a+b)%mod;return ;}
 PII a[N];
 bool dis[N]; 
 
