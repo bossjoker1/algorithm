@@ -1,11 +1,18 @@
-// 80分 
-// 单纯多级标签嵌套，我感觉没问题
-// 不知道为啥第九个点过不去
+// 100分
+// 注意类似以下样例
+// 4 1
+// html
+// ..mSh #SJMc
+// ....4 #Tm
+// ....mSh
+// #SJMc msh
+// answer: 1 4
 #include<stdio.h>
 #include<algorithm>
 #include<string>
 #include<iostream>
 #include<vector>
+#include<map>
 #include<set>
 using namespace std;
 
@@ -27,10 +34,13 @@ struct element {
     string name;    // 元素名
     int level;
     int par;        // 父亲节点的行号，0表示根节点html
+    // vector<int> childs; // 儿子们的行号
     string idname;  // 依附的id选择器名，可有可无
 }Elements[maxn];
 
 int n, m;
+
+map<string, int> mp;
 
 int main() {
     n = read(), m = read();
@@ -93,18 +103,23 @@ int main() {
         rep(j, 1, n) {
             int cnt = find.size() - 1;
             // 匹配到根，开始向上匹配，判断是否正确
+            bool flag = false;
             if (Elements[j].name != find[cnt] && Elements[j].idname != find[cnt])
                 continue;
 
-            if (Elements[j].name == find[cnt]) {
+            if (Elements[j].idname != "" && find[cnt][0] == '#' && find[cnt] != Elements[j].idname)
+                continue;
+
+            if (cnt >= 0 && Elements[j].idname == find[cnt]) {
                 cnt--;
                 ans.insert(j);
             }
 
-            if (cnt>=0&&Elements[j].idname == find[cnt]) {
+            if (cnt >=0 && Elements[j].name == find[cnt]) {
                 cnt--;
                 ans.insert(j);
             }
+
             int temp = j;
             while (cnt >= 0) {
                 int idx = Elements[temp].par;
@@ -122,6 +137,7 @@ int main() {
                 ans.erase(j);
             }
         }
+
         cout << ans.size() << " ";
         for (auto& t : ans) {
             printf("%d ", t);
