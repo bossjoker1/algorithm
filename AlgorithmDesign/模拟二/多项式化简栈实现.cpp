@@ -43,12 +43,12 @@ long long solve(char s[],long long xx)//计算一个表达式的值，假设变�
     {//一次处理一个字符
         if(s[i]=='x')num.push(xx);
         else if(s[i]<='9'&&s[i]>='0') {
-            temp=(temp*10+s[i]-'0')%mod;
-            if(s[i+1]<'0'||s[i+1]>'9') {
+                temp=(temp*10+s[i]-'0')%mod;
+                if(s[i+1]<'0'||s[i+1]>'9') {
                     num.push(temp%mod);
                     temp=0;
                 }
-        }
+         }
    		else if(s[i]=='('){
 		   op.push('(');k++;
 		   if(s[i+1]=='-' || s[i+1]=='+')//处理单目+，-运算 
