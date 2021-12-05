@@ -37,10 +37,8 @@ int toNumber(string str, int& pos) { //从str的pos位置开始，得到一个�
 struct Element {
     string ename;
     int num;
-    Element(string _name, int _num) :ename(_name), num(_num) {}
+    Element(string _name, int _num) :ename(_name), num(_num) {} // 初始化列表
 };
-
-
 
 void handleFuncString(string s, unordered_map<string, int>& mp) {
     stringstream ss(s);
@@ -84,7 +82,7 @@ void handleFuncString(string s, unordered_map<string, int>& mp) {
                     int end = Elements.size() - 1;
                     Elements[end].ename = "*"; // 假性删除括号
                     end--;
-                    // 括号见元素原子个数开乘
+                    // 括号间元素原子个数开乘
                     while (Elements[end].ename != "(") {
                         Elements[end].num *= post;
                         end--;
