@@ -79,7 +79,7 @@ public:
         pair<int, int> index;
 
         for(int i =0; i< n;i++){
-            // 赋值i能继续加速
+            // 赋值i, 加速
             i = findlongest(s, i, index);
         }
         return s.substr(index.first, index.second-index.first+1);
@@ -92,6 +92,7 @@ public:
         // 定位该回文串中间右位置，供下一次查询使用
         int ans = high;
 
+        // 内部已经是回文串了，只看两边
         while(low > 0 && high < s.size()-1 &&s[low-1]==s[high+1]) {low--, high++;}
 
         // 记录此次找到的最大长度
