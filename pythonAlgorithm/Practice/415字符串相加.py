@@ -14,4 +14,5 @@ class Solution:
 
             res += str(jinwei % 10)
             jinwei //= 10
+        # python str内部没有维护reverse函数
         return res[::-1]
