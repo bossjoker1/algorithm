@@ -1,3 +1,4 @@
+# hard
 class Solution:
     def trap(self, height: List[int]) -> int:
         res = 0

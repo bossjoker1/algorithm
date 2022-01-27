@@ -2,7 +2,7 @@ class Solution:
     def capitalizeTitle(self, title: str) -> str:
         l = title.split(" ")
         res = ""
-        i = 0;
+        i = 0
         for t in l:
             if len(t) == 1 or len(t) == 2:
                 res += str(t).lower()
