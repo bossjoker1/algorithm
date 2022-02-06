@@ -1,6 +1,34 @@
 # hard依旧没什么思路
+# 前缀最小和 + 前缀最大和  (堆维护)
 
-# 贴个题解，明天再看
+class Solution:
+    def minimumDifference(self, nums: List[int]) -> int:
+        n, k = len(nums), len(nums) // 3
+        s1, s2 = [0] * n, [0] * n
+        q = []
+
+        for i in range(2*k):
+            if i: s1[i] = s1[i-1]
+            heapq.heappush(q, -nums[i])
+            s1[i] += nums[i]
+            if len(q) > k:
+                s1[i] -= -heapq.heappop(q)
+        
+        q.clear()
+
+        for i in range(n-2, k-2, -1):
+            s2[i] = s2[i+1]
+            heapq.heappush(q, nums[i+1])
+            s2[i] += nums[i+1]
+            if len(q) > k:
+                s2[i] -= heapq.heappop(q)
+
+        res = sys.maxsize
+        for i in range(k-1, 2*k):
+            res = min(res, s1[i] - s2[i])
+
+        return res
+
 # class Solution {
 # public:
 #     long long minimumDifference(vector<int>& nums) {
