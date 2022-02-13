@@ -12,3 +12,6 @@ class Solution:
     def reverseWords(self, s: str) -> str:
         return " ".join(s.split()[::-1])
     
+# c++空间复杂度才能达到O(1)
+# 思路是先去除左右空格和中间的多余空格
+# 然后反转整个字符串再反转单词
