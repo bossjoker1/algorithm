@@ -17,7 +17,7 @@ class Solution:
         # print(dp)
         return dp[n][k]
 
-# 优化思路：空间=>压成一维，注意编程逆序遍历
+# 优化思路：空间=>压成一维，注意逆序遍历
 #          时间=>开始为当前stack的长度
 
 class Solution:
