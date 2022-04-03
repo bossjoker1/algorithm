@@ -1,5 +1,6 @@
 # KMP算法，创造这个算法的人太牛了我只能说
 # https://oi-wiki.org/string/kmp/
+
 class Solution:
     # 获取next数组
     def get_next(self, T):
