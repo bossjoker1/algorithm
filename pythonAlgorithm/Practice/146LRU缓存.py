@@ -12,7 +12,7 @@ class LRUCache:
         self.hashmap = {}
         self.head = ListNode()
         self.tail = ListNode()
-        self.head.next = self.tailsc
+        self.head.next = self.tail
         self.tail.prev = self.head
     
     def remove_node(self, node):
