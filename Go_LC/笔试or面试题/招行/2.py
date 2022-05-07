@@ -6,14 +6,10 @@ A = list(map(int, input().split()))
 A.sort()
 c = Counter(A)
 res = 0
-
 q = []
-
 for k, v in c.items():
     q.append(k)
-    
 n = len(q)
-
 
 cnt, idx = 0, 0
 for i in range(n):
