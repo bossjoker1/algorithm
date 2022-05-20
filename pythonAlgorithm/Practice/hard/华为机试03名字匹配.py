@@ -13,7 +13,7 @@ items = [[] for _ in range(m)]
 
 for i in range(m):
     items[i] = names[i].strip().split()
-# print(names)   
+# print(names)
 # print(items)
     
 res = []
