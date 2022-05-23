@@ -1,6 +1,9 @@
 # 随机pivot快速排序
+import random
+
+
 class Solution:
-    def sortArray(self, nums: List[int]) -> List[int]:
+    def sortArray(self, nums):
         n = len(nums)
         def QuickSort(left, right):
             if left >= right: return nums
@@ -19,4 +22,9 @@ class Solution:
             QuickSort(left, i-1)
             QuickSort(i+1, right)
             return nums
+            
         return QuickSort(0, n-1)
+
+nums = [7,5,9,10,123,2,1,78,54,23,67,21,7,9,23]
+c = Solution()
+print(c.sortArray(nums))
